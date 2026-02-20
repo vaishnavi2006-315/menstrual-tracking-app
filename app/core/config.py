@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     cors_allow_methods: list[str] = ["*"]
     cors_allow_headers: list[str] = ["*"]
     cors_allow_credentials: bool = False
+    database_url: str | None = None
 
 
 @lru_cache
