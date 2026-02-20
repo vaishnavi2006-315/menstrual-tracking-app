@@ -9,7 +9,7 @@ from sqlalchemy import (
     String,
     func,
 )
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, validates
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, validates, relationship
 
 
 metadata = MetaData(
@@ -45,6 +45,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(120), nullable=False, unique=True, index=True)
     age: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    cycles: Mapped[list["CycleData"]] = relationship(back_populates="user", cascade="all, delete-orphan")
 
     @validates("email")
     def validate_email(self, key: str, value: str) -> str:
