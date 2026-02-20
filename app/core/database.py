@@ -1,5 +1,6 @@
 from sqlalchemy import MetaData, create_engine
-from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from sqlalchemy.orm import sessionmaker, DeclarativeBase, Session
+from typing import Generator
 from app.core.config import get_settings
 
 
@@ -28,3 +29,11 @@ def _get_database_url() -> str:
 
 engine = create_engine(_get_database_url(), pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+
+
+def get_db() -> Generator[Session, None, None]:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
